@@ -17,10 +17,8 @@ class IPay88
 	}
 	
 	/**
-     * Generate signature to be used for transaction.
-     *
-     * You may verify your signature with online tool provided by iPay88
-     * http://www.mobile88.com/epayment/testing/TestSignature.asp
+     * Generate signature to be used for transaction. Updated to use SHA256.
+     * Test on https://payment.ipay88.com.my/epayment/testing/testsignature_256.asp
      *
      * @access public
      * @param string $merchantKey ProvidedbyiPay88OPSGandsharebetweeniPay88and merchant only
@@ -32,60 +30,7 @@ class IPay88
     public function generateSignature($refNo, $amount, $currency)
     {
         $stringToHash = $this->merchantKey.$this->merchantCode.$refNo.$amount.$currency;
-        return base64_encode(self::_hex2bin(sha1($stringToHash)));
-    }
-
-    /**
-    *
-    * equivalent of php 5.4 hex2bin
-    *
-    * @access private
-    * @param string $source The string to be converted
-    */
-    private function _hex2bin($source)
-    {
-    	$bin = null;
-    	for ($i=0; $i < strlen($source); $i=$i+2) { 
-    		$bin .= chr(hexdec(substr($source, $i, 2)));
-    	}
-    	return $bin;
-    }
-
-    /**
-    * @access public
-    * @param boolean $multiCurrency Set to true to get payments optinos for multi currency gateway
-    */
-    public static function getPaymentOptions($multiCurrency = false)
-    {
-        $myrOnly = array(
-        	2 => array('Credit Card','MYR'),
-        	6 => array('Maybank2U','MYR'),
-        	8 => array('Alliance Online','MYR'),
-        	10=> array('AmOnline','MYR'),
-        	14=> array('RHB Online','MYR'),
-        	15=> array('Hong Leong Online','MYR'),
-        	16=> array('FPX','MYR'),
-        	20=> array('CIMB Click', 'MYR'),
-        	22=> array('Web Cash','MYR'),
-        	48=> array('PayPal','MYR'),
-        	100 => array('Celcom AirCash','MYR'),
-        	102 => array('Bank Rakyat Internet Banking','MYR'),
-        	103 => array('AffinOnline','MYR')
-        	);
-
-        $multiCurrency = array(
-        	25=> array('Credit Card','USD'),
-        	35=> array('Credit Card','GBP'),
-        	36=> array('Credit Card','THB'),
-        	37=> array('Credit Card','CAD'),
-        	38=> array('Credit Card','SGD'),
-        	39=> array('Credit Card','AUD'),
-        	40=> array('Credit Card','MYR'),
-        	41=> array('Credit Card','EUR'),
-        	42=> array('Credit Card','HKD'),
-        	);
-
-        return $multiCurrency ? $multiCurrency : $myrOnly;
+        return hash('sha256', $stringToHash);
     }
 
     /**

@@ -1,16 +1,16 @@
 # IPay88
 [![Build Status](https://img.shields.io/packagist/dt/karyamedia/ipay88.svg?maxAge=2592000)](https://packagist.org/packages/karyamedia/ipay88)
 
-Ipay88 payment gateway module.
+Ipay88 payment gateway module for Laravel 5.x.
 
 **NOTE**: Your require to request demo account from techsupport@ipay88.com.my
 
 ## Installation
 
-I've make this project available to install via [Composer](https://getcomposer.org/) with following command:
+This plugin can be install via [Composer](https://getcomposer.org/) with following command:
 
 ```bash
-$ composer require karyamedia/ipay88 dev-master
+$ composer require fadlisaad/laravel-ipay88 dev-master
 ```
 
 ## Example Controller
@@ -56,8 +56,7 @@ class Payment {
 	public function response()
 	{	
 		$response = (new IPay88\Payment\Response)->init($this->_merchantCode);
-		echo "<pre>";
-		print_r($response);
+		return $response;
 	}
 }
 ```
@@ -79,4 +78,4 @@ https://github.com/fastsafety/ipay88
 
 ## Lisence
 
-MIT © [Karyamedia](https://github.com/karyamedia/karya). Please see [License File](LICENSE.md) for more information.
+MIT &copy; [Apadmedia](https://github.com/fadlisaad). Please see [License File](LICENSE.md) for more information.

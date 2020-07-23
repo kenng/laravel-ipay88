@@ -1,8 +1,8 @@
 {
-    "name": "karyamedia/ipay88",
-    "description": "Ipay88 payment gateway module",
+    "name": "fadlisaad/ipay88",
+    "description": "iPay88 payment gateway module for Laravel 5.x",
     "keywords": ["ipay", "malaysia", "api"],
-    "homepage": "https://github.com/karyamedia/ipay88",
+    "homepage": "https://github.com/fadlisaad/ipay88",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -11,17 +11,12 @@
     },
     "authors": [
         {
-            "name": "Fikri Marhan",
-            "email": "fikri.marhan@gmail.com"
-        },
-        {
-            "name": "aa6my",
-            "email": "aa6my@qq.com"
+            "name": "Fadli Saad",
+            "email": "fadlisaad@gmail.com"
         }
     ],
     "minimum-stability": "stable",
     "require-dev": {
         "phpunit/phpunit": "5.4.*"
     }
-
 }
