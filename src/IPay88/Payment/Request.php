@@ -130,9 +130,21 @@ class Request
 	{
 		return $this->lang;
 	}
+
 	public function setLang($val)
 	{
 		return $this->lang = $val;
+	}
+
+	private $signatureType;
+	public function getSignatureType()
+	{
+		return $this->signatureType;
+	}
+	
+	public function setSignatureType($val)
+	{
+		return $this->signatureType = $val;
 	}
 
 	private $signature;

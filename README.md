@@ -1,7 +1,6 @@
-# IPay88
-[![Build Status](https://img.shields.io/packagist/dt/karyamedia/ipay88.svg?maxAge=2592000)](https://packagist.org/packages/karyamedia/ipay88)
+# Laravel iPay88
 
-Ipay88 payment gateway module for Laravel 5.x.
+iPay88 payment gateway module for Laravel 5.x. Forked from karyamedia/ipay88
 
 **NOTE**: Your require to request demo account from techsupport@ipay88.com.my
 
@@ -34,20 +33,21 @@ class Payment {
 	{
 		$request = new IPay88\Payment\Request($this->_merchantKey);
 		$this->_data = array(
-			'merchantCode' => $request->setMerchantCode($this->_merchantCode),
-			'paymentId' =>  $request->setPaymentId(1),
-			'refNo' => $request->setRefNo('EXAMPLE0001'),
-			'amount' => $request->setAmount('0.50'),
-			'currency' => $request->setCurrency('MYR'),
-			'prodDesc' => $request->setProdDesc('Testing'),
-			'userName' => $request->setUserName('Your name'),
-			'userEmail' => $request->setUserEmail('email@example.com'),
-			'userContact' => $request->setUserContact('0123456789'),
-			'remark' => $request->setRemark('Some remarks here..'),
-			'lang' => $request->setLang('UTF-8'),
-			'signature' => $request->getSignature(),
-			'responseUrl' => $request->setResponseUrl('http://example.com/response'),
-			'backendUrl' => $request->setBackendUrl('http://example.com/backend')
+			'MerchantCode' => $request->setMerchantCode($this->_merchantCode),
+			'PaymentId' =>  $request->setPaymentId(1),
+			'RefNo' => $request->setRefNo('EXAMPLE0001'),
+			'Amount' => $request->setAmount('0.50'),
+			'Currency' => $request->setCurrency('MYR'),
+			'ProdDesc' => $request->setProdDesc('Testing'),
+			'UserName' => $request->setUserName('Your name'),
+			'UserEmail' => $request->setUserEmail('email@example.com'),
+			'UserContact' => $request->setUserContact('0123456789'),
+			'Remark' => $request->setRemark('Some remarks here..'),
+			'Lang' => $request->setLang('UTF-8'),
+			'Signature' => $request->getSignature(),
+			'SignatureType' => $request->setSignatureType('SHA256'),
+			'ResponseURL' => $request->setResponseUrl('http://example.com/response'),
+			'BackendURL' => $request->setBackendUrl('http://example.com/backend')
 			);
 
 		IPay88\Payment\Request::make($this->_merchantKey, $this->_data);
