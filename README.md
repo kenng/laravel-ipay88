@@ -25,32 +25,57 @@ class Payment {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->_merchantCode = 'xxxxxx'; //MerchantCode confidential
-		$this->_merchantKey = 'xxxxxxxxx'; //MerchantKey confidential
+		$this->_merchantCode = env('IPAY88_MERCHANT_CODE');
+		$this->_merchantKey = env('IPAY88_MERCHANT_KEY');
+		$this->responseUrl = 'http://your-website.com/url-redirected-after-payment';
+		$this->backendUrl = 'http://your-website.com/backup-url-if-responseurl-fails';
 	}
 
+	// if using blade view
 	public function index()
 	{
-		$request = new IPay88\Payment\Request($this->_merchantKey);
+		$iRequest = new \IPay88\Payment\Request($this->_merchantKey);
 		$this->_data = array(
-			'MerchantCode' => $request->setMerchantCode($this->_merchantCode),
-			'PaymentId' =>  $request->setPaymentId(1),
-			'RefNo' => $request->setRefNo('EXAMPLE0001'),
-			'Amount' => $request->setAmount('0.50'),
-			'Currency' => $request->setCurrency('MYR'),
-			'ProdDesc' => $request->setProdDesc('Testing'),
-			'UserName' => $request->setUserName('Your name'),
-			'UserEmail' => $request->setUserEmail('email@example.com'),
-			'UserContact' => $request->setUserContact('0123456789'),
-			'Remark' => $request->setRemark('Some remarks here..'),
-			'Lang' => $request->setLang('UTF-8'),
-			'Signature' => $request->getSignature(),
-			'SignatureType' => $request->setSignatureType('SHA256'),
-			'ResponseURL' => $request->setResponseUrl('http://example.com/response'),
-			'BackendURL' => $request->setBackendUrl('http://example.com/backend')
+			'MerchantCode' => $iRequest->setMerchantCode($this->_merchantCode),
+			'PaymentId' =>  $iRequest->setPaymentId(1),
+			'RefNo' => $iRequest->setRefNo('EXAMPLE0001'),
+			'Amount' => $iRequest->setAmount('0.50'),
+			'Currency' => $iRequest->setCurrency('MYR'),
+			'ProdDesc' => $iRequest->setProdDesc('Testing'),
+			'UserName' => $iRequest->setUserName('Your name'),
+			'UserEmail' => $iRequest->setUserEmail('email@example.com'),
+			'UserContact' => $iRequest->setUserContact('0123456789'),
+			'Remark' => $iRequest->setRemark('Some remarks here..'),
+			'Lang' => $iRequest->setLang('UTF-8'),
+			'Signature' => $iRequest->getSignature(),
+			'SignatureType' => $iRequest->setSignatureType('SHA256'),
+			'ResponseURL' => $iRequest->setResponseUrl('http://example.com/response'),
+			'BackendURL' => $iRequest->setBackendUrl('http://example.com/backend')
 			);
 
 		IPay88\Payment\Request::make($this->_merchantKey, $this->_data);
+	}
+
+	public function getForAPI()
+	{
+		$iRequest = new \IPay88\Payment\Request(
+			$this->_merchantKey,
+			$this->_merchantCode,
+			$this->responseUrl,
+			$this->backendUrl,
+		);
+		return $iRequest->dataForAPI(
+			$this->_merchantCode,
+			'Reference Number or unique order number',	// reference number
+			'0.50',										// amount
+			'MYR', 										// currency
+			'product description',
+			'customer name',
+			'customer email',
+			'customer contact',
+			'merchant remark',
+			'UTF-8',
+		);
 	}
 	
 	public function response()
