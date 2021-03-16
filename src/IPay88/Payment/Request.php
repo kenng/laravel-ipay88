@@ -290,9 +290,8 @@ class Request
 	*  $request = IPay88\Payment\Request::make($merchantKey, $fieldValues)
 	* 
 	*/
-	public static function make($merchantKey, $fieldValues)
+	public function make($fieldValues)
 	{
-		$request = new Request($merchantKey);
 		RequestForm::render($fieldValues, self::$paymentUrl);
 	}
 

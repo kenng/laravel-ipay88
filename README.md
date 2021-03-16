@@ -25,8 +25,13 @@ class Payment {
 	public function __construct()
 	{
 		parent::__construct();
+<<<<<<< Updated upstream
 		$this->_merchantCode = env('IPAY88_MERCHANT_CODE');
 		$this->_merchantKey = env('IPAY88_MERCHANT_KEY');
+=======
+		$this->_merchantCode = env(IPAY88_MERCHANT_CODE, 'xxxxxx');
+		$this->_merchantKey = env(IPAY88_MERCHANT_KEY, 'xxxxxxxxx');
+>>>>>>> Stashed changes
 		$this->responseUrl = 'http://your-website.com/url-redirected-after-payment';
 		$this->backendUrl = 'http://your-website.com/backup-url-if-responseurl-fails';
 	}
