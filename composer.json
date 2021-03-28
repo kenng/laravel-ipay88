@@ -11,12 +11,12 @@
     },
     "authors": [
         {
-            "name": "Fadli Saad",
-            "email": "fadlisaad@gmail.com"
-        },
-        {
             "name": "Ken Ng",
             "email": "kenngsimply@gmail.com"
+        },
+        {
+            "name": "Fadli Saad",
+            "email": "fadlisaad@gmail.com"
         }
     ],
     "minimum-stability": "stable",
