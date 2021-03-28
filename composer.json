@@ -2,7 +2,7 @@
     "name": "kenng/ipay88",
     "description": "iPay88 payment gateway module for Laravel 8.x (original package: fadlisaad/ipay88)",
     "keywords": ["ipay", "malaysia", "api"],
-    "homepage": "git@github.com:kenng/laravel-ipay88.git",
+    "homepage": "https://github.com/kenng/laravel-ipay88.git",
     "license": "MIT",
     "autoload": {
         "psr-4": {
