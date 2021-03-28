@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace IPay88\Payment;
 
@@ -166,7 +166,7 @@ class Request
 	{
 		return $this->signatureType;
 	}
-	
+
 	public function setSignatureType($val)
 	{
 		return $this->signatureType = $val;
@@ -224,7 +224,7 @@ class Request
 	 * @param lang Encoding type
 	 *		“ISO-8859-1” – English
 	 *      “UTF-8” – Unicode
-	 *      “GB2312” – Chinese Simplified “GD18030” – Chinese Simplified 
+	 *      “GB2312” – Chinese Simplified “GD18030” – Chinese Simplified
 	 *      “BIG5” – Chinese Traditional
 	 */
 	public function dataForAPI(
@@ -288,11 +288,11 @@ class Request
 	*  Override `$fillable_fields` to determine what value can be set during this factory method
 	* @example
 	*  $request = IPay88\Payment\Request::make($merchantKey, $fieldValues)
-	* 
+	*
 	*/
-	public function make($fieldValues)
+	public function make($fieldValues, $isSubmitOnLoad=true)
 	{
-		RequestForm::render($fieldValues, self::$paymentUrl);
+		RequestForm::render($fieldValues, self::$paymentUrl, $isSubmitOnLoad);
 	}
 
 }
