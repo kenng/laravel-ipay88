@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace IPay88\Payment;
 
@@ -11,9 +11,31 @@ class Request
 
 	private $merchantKey;
 
-	public function __construct($merchantKey)
+	/*
+     * @param merchantKey key provided by iPay88 OPSG and share between iPay88 and merchant only
+	 * @param merchantCode The Merchant Code provided by iPay88 and use to uniquely identify the Merchant.
+	 * @param responseUrl URL to redirect to on completed/cancellation of iPay88  payment
+	 * @param backendUrl URL for iPay88 to return respones in case responseUrl is not reachable (due to user close the browser and etc)
+	 * @param lang Encoding type
+	 *		“ISO-8859-1” – English
+	 *      “UTF-8” – Unicode
+	 *      “GB2312” – Chinese Simplified “GD18030” – Chinese Simplified
+	 *      “BIG5” – Chinese Traditional
+	 */
+	public function __construct(
+		string $merchantKey,
+		string $merchantCode,
+		string $responseUrl,
+		string $backendUrl,
+		string $lang = 'UTF-8',
+		string $signatureType = 'SHA256')
     {
-    	$this->merchantKey = $merchantKey;
+		$this->merchantKey = $merchantKey;
+		$this->merchantCode = $merchantCode;
+		$this->responseUrl = $responseUrl;
+		$this->backendUrl = $backendUrl;
+		$this->lang = $lang;
+		$this->signatureType = $signatureType;
     }
 
 	private $merchantCode;
@@ -27,6 +49,7 @@ class Request
 		return $this->merchantCode = $val;
 	}
 
+	// optional: if not set, payment gateway will set it
 	private $paymentId;
 	public function getPaymentId()
 	{
@@ -37,6 +60,8 @@ class Request
 		return $this->paymentId = $val;
 	}
 
+	// refNo is Unique merchant transaction number / Order ID
+	// this will be used in signature generation and verification
 	private $refNo;
 	public function getRefNo()
 	{
@@ -141,24 +166,30 @@ class Request
 	{
 		return $this->signatureType;
 	}
-	
+
 	public function setSignatureType($val)
 	{
 		return $this->signatureType = $val;
 	}
 
 	private $signature;
-	public function getSignature($refresh = false)
+	public function getSignature(
+		string $merchantCode,
+		string $refNo,
+		string $amount,
+		string $currency,
+		bool $refresh = false,
+	)
 	{
 		//simple caching
 		if((!$this->signature) || $refresh)
 		{
 			$this->signature = Signature::generateSignature(
 				$this->merchantKey,
-				$this->getMerchantCode(),
-				$this->getRefNo(),
-				preg_replace('/[\.\,]/', '', $this->getAmount()), //clear ',' and '.'
-				$this->getCurrency()
+				$merchantCode ?? $this->getMerchantCode(),
+				$refNo ?? $this->getRefNo(),
+				preg_replace('/[\.\,]/', '', $amount ?? $this->getAmount()), //clear ',' and '.'
+				$currency ?? $this->getCurrency()
 			);
 		}
 
@@ -185,6 +216,63 @@ class Request
 		return $this->backendUrl = $val;
 	}
 
+	/**
+	 * @param userName Customer name
+	 * @param userEmail Customer email for receiving receipt
+	 * @param userContact Customer contact number
+	 * @param remark Merchant remarks
+	 * @param lang Encoding type
+	 *		“ISO-8859-1” – English
+	 *      “UTF-8” – Unicode
+	 *      “GB2312” – Chinese Simplified “GD18030” – Chinese Simplified
+	 *      “BIG5” – Chinese Traditional
+	 */
+	public function dataForAPI(
+		string $merchantCode,
+		string $refNo,
+		string $amount,
+		string $currency,
+		string $prodDesc,
+		string $userName,
+		string $userEmail,
+		string $userContact,
+		string $remark,
+		int $paymendId = null,
+		string $lang = 'UTF-8',
+	) : array {
+		$theForm = array(
+			'MerchantCode' => $merchantCode ?? $this->merchantCode,
+			'RefNo' => $refNo ?? $this->refNo,
+			'Amount' => $amount?? $this->amount,
+			'Currency' => $currency ?? $this->currency,
+			'ProdDesc' => $prodDesc ?? $this->prodDesc,
+			'UserName' => $userName ?? $this->userName,
+			'UserEmail' => $userEmail,
+			'UserContact' => $userContact,
+			'Remark' => $remark ?? $this->remark,
+			'Lang' => $lang,
+			'Signature' => $this->getSignature(
+				$merchantCode,
+				$refNo,
+				$amount,
+				$currency,
+			),
+			'SignatureType' => $this->signatureType,
+			'ResponseURL' => $this->responseUrl,
+			'BackendURL' => $this->backendUrl,
+		);
+
+		// optional, if not specified then payment gateway will set its default
+		if (isset($paymendId)) {
+			$theForm['PaymentId'] = $paymendId;
+		}
+
+		return [
+			'paymentUrl' => self::$paymentUrl,
+			'form' => $theForm,
+		];
+	}
+
 	protected static $fillable_fields = [
 		'merchantCode','paymentId','refNo','amount',
 		'currency','prodDesc','userName','userEmail',
@@ -200,11 +288,11 @@ class Request
 	*  Override `$fillable_fields` to determine what value can be set during this factory method
 	* @example
 	*  $request = IPay88\Payment\Request::make($merchantKey, $fieldValues)
-	* 
+	*
 	*/
-	public static function make($merchantKey, $fieldValues)
+	public function make($fieldValues, $isSubmitOnLoad=true)
 	{
-		$request = new Request($merchantKey);
-		RequestForm::render($fieldValues, self::$paymentUrl);
+		RequestForm::render($fieldValues, self::$paymentUrl, $isSubmitOnLoad);
 	}
+
 }

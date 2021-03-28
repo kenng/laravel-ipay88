@@ -8,6 +8,10 @@ class Signature
      * Generate signature to be used for transaction.
      *
      * You may verify your signature with online tool provided by iPay88
+     * Request:
+     * https://payment.ipay88.com.my/epayment/testing/testsignature_256.asp
+     * 
+     * Response:
      * https://payment.ipay88.com.my/epayment/testing/testsignature_response_256.asp
      *
      * @access public
