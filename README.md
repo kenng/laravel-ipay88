@@ -9,7 +9,7 @@ iPay88 payment gateway module for Laravel 5.x. Forked from karyamedia/ipay88
 This plugin can be install via [Composer](https://getcomposer.org/) with following command:
 
 ```bash
-$ composer require fadlisaad/laravel-ipay88 dev-master
+$ composer require kenng/laravel-ipay88 dev-master
 ```
 
 ## Example Controller
@@ -39,7 +39,7 @@ class Payment {
 			'MerchantCode' => $iRequest->setMerchantCode($this->_merchantCode),
 			'PaymentId' =>  $iRequest->setPaymentId(1),
 			'RefNo' => $iRequest->setRefNo('EXAMPLE0001'),
-			'Amount' => $iRequest->setAmount('0.50'),
+			'Amount' => $iRequest->setAmount('1.00'),
 			'Currency' => $iRequest->setCurrency('MYR'),
 			'ProdDesc' => $iRequest->setProdDesc('Testing'),
 			'UserName' => $iRequest->setUserName('Your name'),
